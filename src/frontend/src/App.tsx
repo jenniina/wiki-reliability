@@ -23,11 +23,19 @@ import { FaExclamationCircle } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdStars } from "react-icons/md";
 
+const colorsObj = {
+  red: "#F5002D",
+  amber: "#B38F00",
+  teal: "#2E9E93",
+  green: "#2E9E36",
+  yellow: "#B38F00",
+};
+
 function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
   // Colors chosen for good contrast on white (#fff) and light backgrounds
   // Heikko (Weak) – red
-  // Kohtalainen (Moderate) – warm amber/yellow
-  // Hyvä (Good) – dark teal
+  // Kohtalainen (Moderate) – warm yellow
+  // Hyvä (Good) – teal
   // Erinomainen (Excellent) – green with yellow star detail
   switch (verdict) {
     case "Heikko":
@@ -35,7 +43,7 @@ function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
         <FaExclamationTriangle
           aria-hidden="true"
           style={{
-            color: "#F5002D", // red
+            color: colorsObj.red,
             fontSize: "2.25rem",
             verticalAlign: "middle",
             marginRight: "0.35rem",
@@ -47,7 +55,7 @@ function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
         <FaExclamationCircle
           aria-hidden="true"
           style={{
-            color: "#B38F00", // amber
+            color: colorsObj.amber,
             fontSize: "2.25rem",
             verticalAlign: "middle",
             marginRight: "0.35rem",
@@ -59,7 +67,7 @@ function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
         <FaCheckCircle
           aria-hidden="true"
           style={{
-            color: "#2E9E93", // teal
+            color: colorsObj.teal,
             fontSize: "2.25rem",
             verticalAlign: "middle",
             marginRight: "0.35rem",
@@ -80,7 +88,7 @@ function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
         >
           <MdStars
             style={{
-              color: "#2E9E36", // green for outer shape
+              color: colorsObj.green, // green for outer shape
               filter: "drop-shadow(0 0 2px rgba(0,0,0,0.4))",
             }}
           />
@@ -92,7 +100,9 @@ function VerdictIcon({ verdict }: { verdict: Result["verdict"] }) {
               height: "1.2rem",
               borderRadius: "50%",
               background:
-                "radial-gradient(circle, #FFEB3B 0%, transparent 70%)",
+                "radial-gradient(circle, " +
+                colorsObj.yellow +
+                " 0%, transparent 70%)",
             }}
           />
         </span>
@@ -385,13 +395,13 @@ export default function App() {
                 <VerdictIcon verdict={result.verdict} />
                 {verdictToLabel(result.verdict, t)}
                 {!result.rejected && (
-                  <span className={styles["thermometer-wrapper"]}>
+                  <span className={styles["progressbar-wrapper"]}>
                     <span
-                      className={styles["thermometer-track"]}
+                      className={styles["progressbar-track"]}
                       aria-hidden="true"
                     >
                       <span
-                        className={styles["thermometer-fill"]}
+                        className={styles["progressbar-fill"]}
                         style={{
                           width: `${Math.max(
                             0,
@@ -399,16 +409,18 @@ export default function App() {
                           )}%`,
                           backgroundColor:
                             result.verdict === "Heikko"
-                              ? "#B00020"
+                              ? colorsObj.red
                               : result.verdict === "Kohtalainen"
-                                ? "#B38F00"
+                                ? colorsObj.amber
                                 : result.verdict === "Hyvä"
-                                  ? "#00695C"
-                                  : "#1B5E20",
+                                  ? colorsObj.teal
+                                  : result.verdict === "Erinomainen"
+                                    ? colorsObj.green
+                                    : "gray",
                         }}
                       />
                     </span>
-                    <span className={styles["thermometer-label"]}>
+                    <span className={styles["progressbar-label"]}>
                       {Math.round(result.score)} / 100
                     </span>
                   </span>
@@ -445,7 +457,7 @@ export default function App() {
                         </span>
                       ))}
                       {result.highlights.positives.length === 0 && (
-                        <span className={styles["tag-positive"]}>
+                        <span className={styles["tag-neutral"]}>
                           {t("NoStrongPluses")}
                         </span>
                       )}
@@ -465,7 +477,7 @@ export default function App() {
                         </span>
                       ))}
                       {result.highlights.negatives.length === 0 && (
-                        <span className={styles["tag-negative"]}>
+                        <span className={styles["tag-neutral"]}>
                           {t("NoStrongMinuses")}
                         </span>
                       )}
