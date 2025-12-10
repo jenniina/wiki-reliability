@@ -1,16 +1,29 @@
 /* Main app styles */
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background-color: #fff;
+  color: #202020;
+  margin: 0;
+  padding: 0;
+}
 body * {
   box-sizing: border-box;
 }
 .main {
   --gap: 10px;
   max-width: 900px;
-  margin: 2rem auto;
-  padding: 1rem;
+  margin: 1rem 0.2rem;
+  padding: 0.2rem;
 }
 
 .header {
   display: flex;
+  flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
@@ -18,16 +31,31 @@ body * {
 }
 
 .title {
-  font-size: 28px;
-  font-weight: 700;
+  font-family: "Linux Libertine", "Georgia", "Times", "Source Serif 4", serif;
+  line-height: 1.375;
+  font-size: 20px;
+  font-weight: normal;
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0;
 }
 
+@media (min-width: 600px) {
+  .main {
+    --gap: 12px;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  .title {
+    font-size: 28px;
+  }
+}
+
 .search-container {
   display: flex;
+  flex-flow: row wrap;
   gap: 8px;
   margin-top: 16px;
 }
@@ -116,11 +144,15 @@ body * {
   flex-flow: row wrap;
   gap: var(--gap, 10px);
 }
-
 .config-section .advanced > div > div {
-  width: calc(50% - var(--gap, 10px));
+  width: 100%;
 }
 
+@media (min-width: 600px) {
+  .config-section .advanced > div > div {
+    width: calc(50% - var(--gap, 10px));
+  }
+}
 .config-panel {
   border: 1px solid #eee;
   border-radius: 3px;
@@ -486,7 +518,13 @@ body * {
 .slider-row-note-right {
   color: #555;
   font-size: small;
-  white-space: nowrap;
+}
+
+@media (min-width: 600px) {
+  .slider-row-note,
+  .slider-row-note-right {
+    white-space: nowrap;
+  }
 }
 
 .slider-row-note-right {
@@ -495,6 +533,7 @@ body * {
 
 .slider-row-slider {
   width: 100%;
+  min-width: 50px;
 }
 
 /* -language -switcher -styles */
@@ -760,11 +799,22 @@ body * {
   display: flex;
   align-items: center;
 }
-
 .strictness-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: center;
   gap: 8px;
+}
+.strictness-grid > * {
+  align-self: stretch;
+}
+@media (min-width: 600px) {
+  .strictness-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
 }
 
 .profile-button-title {
