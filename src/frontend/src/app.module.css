@@ -30,6 +30,26 @@ body * {
   gap: 1rem;
 }
 
+.about {
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.about summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.about[open] {
+  margin-bottom: 1rem;
+}
+
+.about-content {
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
 .title {
   font-family: "Linux Libertine", "Georgia", "Times", "Source Serif 4", serif;
   line-height: 1.375;
@@ -334,15 +354,15 @@ body * {
   text-decoration: underline;
 }
 
-.policy-details {
+.details {
   margin-top: 16px;
-  padding: 12px 14px;
+  padding: 8px 10px;
   border-radius: 8px;
   background: #f9fafb;
   border: 1px solid #e2e8f0;
 }
 
-.policy-summary {
+.summary {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -351,23 +371,30 @@ body * {
   padding: 4px 0;
 }
 
-.policy-summary::marker {
+.summary::marker {
   /* Hide default disclosure triangle in some browsers so we can style our own */
   content: "";
 }
 
-.policy-summary::after {
+.summary::after {
   content: "▾";
-  font-size: 12px;
+  font-size: 22px;
   margin-left: auto;
   color: #666;
+  transform: rotate(0deg);
+  transition-property: transform;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+.details[open] .summary::after {
+  transform: rotate(180deg);
 }
 
-.policy-summary-text {
+.summary-text {
   font-weight: 600;
 }
 
-.policy-summary-badge {
+.summary-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;

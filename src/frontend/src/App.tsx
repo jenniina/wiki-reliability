@@ -303,6 +303,14 @@ export default function App() {
           <SetLanguage />
         </header>
 
+        <details className={`${styles.about} ${styles["details"]}`}>
+          <summary className={styles.summary}>{t("About")}</summary>
+          <div className={styles["about-content"]}>
+            <p>{t("AboutIntro")}</p>
+            <p>{t("AboutHowToUse")}</p>
+          </div>
+        </details>
+
         <form
           className={styles["search-container"]}
           onSubmit={(e) => {
@@ -510,12 +518,12 @@ export default function App() {
                 </a>
               ))}
             </div>
-            <details className={styles["policy-details"]}>
-              <summary className={styles["policy-summary"]}>
-                <span className={styles["policy-summary-text"]}>
+            <details className={styles["details"]}>
+              <summary className={styles["summary"]}>
+                <span className={styles["summary-text"]}>
                   {t("UsedProfile")}
                 </span>
-                <span className={styles["policy-summary-badge"]}>
+                <span className={styles["summary-badge"]}>
                   {(() => {
                     const levels: StrictnessLevel[] = [
                       "permissive",
@@ -534,7 +542,7 @@ export default function App() {
                   })()}
                 </span>
               </summary>
-              <div className={styles["policy-grid"]}>
+              <div className={styles["grid"]}>
                 <div>
                   <div className={styles["policy-group-title"]}>
                     {t("WeightsAndEffects")}
