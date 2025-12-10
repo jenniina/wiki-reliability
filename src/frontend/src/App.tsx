@@ -151,10 +151,16 @@ export default function App() {
   // Handle strictness level changes
   const handleStrictnessChange = (level: StrictnessLevel) => {
     setStrictnessLevel(level);
-    const newPolicy = STRICTNESS_PROFILES[level];
-    setPolicy(newPolicy);
-    // Update autoRejectCN based on the profile
-    setAutoRejectCN(!!newPolicy.rejectIf?.citationNeededGreaterThan);
+    const basePolicy = STRICTNESS_PROFILES[level];
+    // Preserve the current autoRejectCN checkbox choice: if it's on,
+    // enforce citationNeededGreaterThan = 0; if off, clear it.
+    setPolicy((prev) => ({
+      ...basePolicy,
+      rejectIf: {
+        ...basePolicy.rejectIf,
+        citationNeededGreaterThan: autoRejectCN ? 0 : undefined,
+      },
+    }));
   };
 
   const analyzeWithChosen = async (pickedTitle: string) => {
@@ -296,6 +302,14 @@ export default function App() {
           <h1 className={styles.title}>{t("WikipediaReliabilityChecker")}</h1>
           <SetLanguage />
         </header>
+
+        <details className={`${styles.about} ${styles["details"]}`}>
+          <summary className={styles.summary}>{t("About")}</summary>
+          <div className={styles["about-content"]}>
+            <p>{t("AboutIntro")}</p>
+            <p>{t("AboutHowToUse")}</p>
+          </div>
+        </details>
 
         <form
           className={styles["search-container"]}
@@ -504,12 +518,12 @@ export default function App() {
                 </a>
               ))}
             </div>
-            <details className={styles["policy-details"]}>
-              <summary className={styles["policy-summary"]}>
-                <span className={styles["policy-summary-text"]}>
+            <details className={styles["details"]}>
+              <summary className={styles["summary"]}>
+                <span className={styles["summary-text"]}>
                   {t("UsedProfile")}
                 </span>
-                <span className={styles["policy-summary-badge"]}>
+                <span className={styles["summary-badge"]}>
                   {(() => {
                     const levels: StrictnessLevel[] = [
                       "permissive",
@@ -528,7 +542,7 @@ export default function App() {
                   })()}
                 </span>
               </summary>
-              <div className={styles["policy-grid"]}>
+              <div className={styles["grid"]}>
                 <div>
                   <div className={styles["policy-group-title"]}>
                     {t("WeightsAndEffects")}
@@ -820,7 +834,17 @@ export default function App() {
                     <input
                       type="checkbox"
                       checked={autoRejectCN}
-                      onChange={(e) => setAutoRejectCN(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setAutoRejectCN(checked);
+                        setPolicy((p) => ({
+                          ...p,
+                          rejectIf: {
+                            ...p.rejectIf,
+                            citationNeededGreaterThan: checked ? 0 : undefined,
+                          },
+                        }));
+                      }}
                     />
                     <span className={styles["checkbox-span"]}>
                       {t("RejectIfCitationNeeded")}

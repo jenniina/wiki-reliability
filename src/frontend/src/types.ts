@@ -166,7 +166,6 @@ export const STRICTNESS_PROFILES = {
       editorDiversity: 10,
     },
     rejectIf: {
-      citationNeededGreaterThan: 0,
       hasProblemTemplates: true,
       revertRateAbove: 0.4,
       daysSinceLastEditAbove: 1825, // 5 years
