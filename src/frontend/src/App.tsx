@@ -237,6 +237,40 @@ export default function App() {
     }
   };
 
+  const reanalyze = async () => {
+    if (!result) return; // nothing to re-run
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const body: AnalyzeRequest = {
+        title: result.title,
+        lang: result.lang,
+        policy,
+        preferChoice: false,
+      };
+
+      const r = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json: AnalyzeResponse = await r.json();
+      if (!r.ok) throw new Error((json as any).error || "Error");
+
+      // Here we assume backend returns a final Result, not a choose-response,
+      // because we already know the exact page.
+      const newResult = json as Result;
+      setResult(newResult);
+      if (newResult.title) setTitle(newResult.title);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <a href="#main-content" className={styles["skip-link"]}>
@@ -382,62 +416,63 @@ export default function App() {
                 {result.rejected && <span>{t("Rejected")}</span>}
 
                 <InfoTip text={t("PointsHelp")} horizontal="right" />
+                <button
+                  type="button"
+                  className={styles.reanalyze}
+                  onClick={() => reanalyze()}
+                >
+                  {loading ? t("Analyzing") : t("ReAnalyze")}
+                </button>
               </h2>
               {result.rejected && (
                 <div className={styles["result-reason"]}>
                   {t("Reason")} {String(result.reason)}
                 </div>
               )}
-              <ul className={styles["result-list"]}>
-                <li>
-                  <InfoTip
-                    text={t("ReferencesHelp")}
-                    before={true}
-                    horizontal="right"
-                  />
-                  {t("References")} {result.signals.referenceCount}
-                </li>
-                {result.signals.citationNeeded > 0 && (
-                  <li>
-                    <InfoTip
-                      text={t("CitationNeededCountHelp")}
-                      before={true}
-                      horizontal="right"
-                    />
-                    &quot;{t("CitationNeededCount")}&quot;{" "}
-                    {result.signals.citationNeeded}
-                  </li>
-                )}
-                {result.signals.problemTemplates > 0 && (
-                  <li>
-                    <InfoTip
-                      text={t("ProblemTemplatesCountHelp")}
-                      before={true}
-                      horizontal="right"
-                    />
-                    {t("ProblemTemplatesCount")}{" "}
-                    {result.signals.problemTemplates}
-                  </li>
-                )}
-                <li>
-                  <InfoTip
-                    text={t("DaysSinceLastEditHelp")}
-                    before={true}
-                    horizontal="right"
-                  />
-                  {t("DaysSinceLastEdit")}{" "}
-                  {Math.round(result.signals.daysSinceLastEdit)}
-                </li>
-                <li>
-                  <InfoTip
-                    text={t("RevertRateHelp")}
-                    before={true}
-                    horizontal="right"
-                  />
-                  {t("RevertRate")}{" "}
-                  {(result.signals.revertRate * 100).toFixed(1)} %
-                </li>
-              </ul>
+              {result.highlights && (
+                <div className={styles.highlights}>
+                  <div>
+                    <div className={styles["highlights-column-title"]}>
+                      {t("Pluses")}
+                    </div>
+                    <div className={styles["tag-list"]}>
+                      {result.highlights.positives.map((h, idx) => (
+                        <span
+                          key={`pos-${idx}-${h.id}`}
+                          className={styles["tag-positive"]}
+                        >
+                          {t(h.id as never)}
+                        </span>
+                      ))}
+                      {result.highlights.positives.length === 0 && (
+                        <span className={styles["tag-positive"]}>
+                          {t("NoStrongPluses")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={styles["highlights-column-title"]}>
+                      {t("Minuses")}
+                    </div>
+                    <div className={styles["tag-list"]}>
+                      {result.highlights.negatives.map((h, idx) => (
+                        <span
+                          key={`neg-${idx}-${h.id}`}
+                          className={styles["tag-negative"]}
+                        >
+                          {t(h.id as never)}
+                        </span>
+                      ))}
+                      {result.highlights.negatives.length === 0 && (
+                        <span className={styles["tag-negative"]}>
+                          {t("NoStrongMinuses")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className={styles["evidence-container"]}>
               {result.evidence.map((e) => (

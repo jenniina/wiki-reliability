@@ -11,7 +11,7 @@ function SliderRow(props: SliderRowProps) {
     onChange,
     min = 0,
     max = 40,
-    step = 5,
+    step = 2,
     leftNote,
     rightNote,
     suffix,

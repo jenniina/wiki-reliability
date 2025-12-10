@@ -28,6 +28,10 @@ export type Result = {
   verdict: "Heikko" | "Kohtalainen" | "Hyvä" | "Erinomainen";
   rejected?: boolean;
   reason?: string;
+  highlights?: {
+    positives: { type: "positive"; id: string }[];
+    negatives: { type: "negative"; id: string }[];
+  };
   signals: {
     referenceCount: number;
     citationNeeded: number;
@@ -129,12 +133,12 @@ export type InfoTipProps = {
 export const DEFAULT_POLICY: Policy = {
   // Normal, balanced default (mirrors backend)
   weights: {
-    references: 30,
-    citationNeededPenalty: 10,
-    problemTemplatesPenalty: 20,
-    recency: 20,
-    revert: 15,
-    talkPenalty: 10,
+    references: 35,
+    citationNeededPenalty: 8,
+    problemTemplatesPenalty: 16,
+    recency: 18,
+    revert: 12,
+    talkPenalty: 8,
     length: 10,
     structure: 8,
     qualityBonus: 12,
@@ -175,12 +179,12 @@ export const STRICTNESS_PROFILES = {
   // Salliva profiili - Quick overview, fewer rejections
   permissive: {
     weights: {
-      references: 35,
-      citationNeededPenalty: 6,
-      problemTemplatesPenalty: 12,
+      references: 40,
+      citationNeededPenalty: 5,
+      problemTemplatesPenalty: 10,
       recency: 18,
-      revert: 10,
-      talkPenalty: 5,
+      revert: 8,
+      talkPenalty: 4,
       length: 12,
       structure: 6,
       qualityBonus: 10,

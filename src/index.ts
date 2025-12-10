@@ -106,7 +106,7 @@ app.post(
 );
 
 if (process.env.NODE_ENV === "production") {
-  const distDir = path.resolve("dist", "frontend");
+  const distDir = path.resolve("frontend");
   app.use(express.static(distDir));
   app.get("*", (_req: Request, res: Response) =>
     res.sendFile(path.join(distDir, "index.html"))

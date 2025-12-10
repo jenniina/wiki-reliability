@@ -205,6 +205,41 @@ body * {
   border-radius: 6px;
   padding: 16px;
 }
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+.highlights-column-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.tag-positive,
+.tag-negative {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  border: 1px solid transparent;
+}
+.tag-positive {
+  background-color: #e5f7ed;
+  border-color: #2e9e36;
+  color: #175c20;
+}
+.tag-negative {
+  background-color: #ffe6e8;
+  border-color: #f5002d;
+  color: #8b0019;
+}
 
 .result-header {
   font-size: 20px;
@@ -247,12 +282,6 @@ body * {
 .thermometer-label {
   font-size: 13px;
   color: #444;
-}
-
-.result-list {
-  margin-top: 8px;
-  line-height: 1.7;
-  list-style: none;
 }
 
 .evidence-container {
