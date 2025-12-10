@@ -18,12 +18,17 @@ import {
 import { verdictToLabel } from "./types";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { LanguageContext } from "./contexts/LanguageContext";
-import { FaExclamationTriangle } from "react-icons/fa";
-import { FaExclamationCircle } from "react-icons/fa";
-import { FaCheckCircle } from "react-icons/fa";
+import {
+  FaExclamationTriangle,
+  FaExclamationCircle,
+  FaCheckCircle,
+  FaLockOpen,
+  FaUnlock,
+  FaLock,
+} from "react-icons/fa";
 import { MdStars } from "react-icons/md";
 
-const colorsObj = {
+export const colorsObj = {
   red: "#F5002D",
   amber: "#B38F00",
   teal: "#2E9E93",
@@ -637,14 +642,14 @@ export default function App() {
           <div className={styles["strictness-grid"]}>
             <button
               onClick={() => handleStrictnessChange("permissive")}
-              className={
+              className={`${styles.permissive} ${
                 strictnessLevel === "permissive" && isPresetPolicy
                   ? styles["profile-button-active"]
                   : styles["profile-button"]
-              }
+              }`}
             >
               <div className={styles["profile-button-title"]}>
-                {t("Permissive")}
+                <FaLockOpen /> {t("Permissive")}
               </div>
               <div className={styles["profile-button-description"]}>
                 {t("PermissiveDesc")}
@@ -652,14 +657,14 @@ export default function App() {
             </button>
             <button
               onClick={() => handleStrictnessChange("normal")}
-              className={
+              className={`${styles.normal} ${
                 strictnessLevel === "normal" && isPresetPolicy
                   ? styles["profile-button-active"]
                   : styles["profile-button"]
-              }
+              }`}
             >
               <div className={styles["profile-button-title"]}>
-                {t("Regular")}
+                <FaUnlock /> {t("Regular")}
               </div>
               <div className={styles["profile-button-description"]}>
                 {t("NormalDesc")}
@@ -667,14 +672,14 @@ export default function App() {
             </button>
             <button
               onClick={() => handleStrictnessChange("strict")}
-              className={
+              className={`${styles.strict} ${
                 strictnessLevel === "strict" && isPresetPolicy
                   ? styles["profile-button-active"]
                   : styles["profile-button"]
-              }
+              }`}
             >
               <div className={styles["profile-button-title"]}>
-                {t("Strict")}
+                <FaLock /> {t("Strict")}
               </div>
               <div className={styles["profile-button-description"]}>
                 {t("StrictDesc")}

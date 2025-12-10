@@ -406,6 +406,18 @@ body * {
   cursor: pointer;
   text-align: center;
 }
+.profile-button-active.permissive {
+  border-color: #2e8b57;
+  background: #dff6e9;
+}
+.profile-button-active.normal {
+  border-color: #007acc;
+  background: #e6f3ff;
+}
+.profile-button-active.strict {
+  border-color: #8a7300;
+  background: #fff5e1;
+}
 
 /* -components */
 
@@ -758,11 +770,12 @@ body * {
 .profile-button-title {
   font-weight: 600;
   margin-bottom: 4px;
+  color: #4d4d4d;
 }
 
 .profile-button-description {
   font-size: 12px;
-  color: #666;
+  color: #4d4d4d;
 }
 
 /* Accordion Button -states */
