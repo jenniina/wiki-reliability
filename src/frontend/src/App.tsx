@@ -151,10 +151,16 @@ export default function App() {
   // Handle strictness level changes
   const handleStrictnessChange = (level: StrictnessLevel) => {
     setStrictnessLevel(level);
-    const newPolicy = STRICTNESS_PROFILES[level];
-    setPolicy(newPolicy);
-    // Update autoRejectCN based on the profile
-    setAutoRejectCN(!!newPolicy.rejectIf?.citationNeededGreaterThan);
+    const basePolicy = STRICTNESS_PROFILES[level];
+    // Preserve the current autoRejectCN checkbox choice: if it's on,
+    // enforce citationNeededGreaterThan = 0; if off, clear it.
+    setPolicy((prev) => ({
+      ...basePolicy,
+      rejectIf: {
+        ...basePolicy.rejectIf,
+        citationNeededGreaterThan: autoRejectCN ? 0 : undefined,
+      },
+    }));
   };
 
   const analyzeWithChosen = async (pickedTitle: string) => {
@@ -820,7 +826,17 @@ export default function App() {
                     <input
                       type="checkbox"
                       checked={autoRejectCN}
-                      onChange={(e) => setAutoRejectCN(e.target.checked)}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setAutoRejectCN(checked);
+                        setPolicy((p) => ({
+                          ...p,
+                          rejectIf: {
+                            ...p.rejectIf,
+                            citationNeededGreaterThan: checked ? 0 : undefined,
+                          },
+                        }));
+                      }}
                     />
                     <span className={styles["checkbox-span"]}>
                       {t("RejectIfCitationNeeded")}
